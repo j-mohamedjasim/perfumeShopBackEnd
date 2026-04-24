@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import mysql.connector
 import os
+import base64
 
 app = Flask(__name__)
 CORS(app)
@@ -21,24 +22,26 @@ def get_product(ids):
     cursor = db.cursor(dictionary=True)
 
     query = f"SELECT * FROM products WHERE id IN ({','.join(['%s'] * len(id_list))})"
-
     cursor.execute(query, id_list)
-    product = cursor.fetchall()
+    rows = cursor.fetchall()
 
     cursor.close()
     db.close()
 
-    if not product:
+    if not rows:
         return jsonify({"error": "Product not found"}), 404
-    
+
     combined = {
-        "name": product[0]["name"],
-        "description": product[0]["description"],
-        "image": product[0]["image"],
-        "price": [products["price"] for products in product],
-        "gram": [products["gram"] for products in product],
-        "stock": [products["stock"] for products in product]
+        "name": rows[0]["name"],
+        "description": rows[0]["description"],
+        "image": base64.b64encode(rows[0]["image"]).decode("utf-8"),
+        "price": [r["price"] for r in rows],
+        "gram": [r["gram"] for r in rows],
+        "stock": [r["stock"] for r in rows]
     }
+
     return jsonify(combined)
 
-app.run()
+# Only for local development
+if __name__ == "__main__":
+    app.run(debug=True)
