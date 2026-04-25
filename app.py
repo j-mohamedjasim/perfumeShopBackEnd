@@ -35,7 +35,7 @@ def get_product(ids):
 
         cursor = db.cursor(dictionary=True)
 
-        query = f"SELECT * FROM products WHERE id IN ({','.join(['%s'] * len(id_list))})"
+        query = f"SELECT * FROM defaultdb WHERE id IN ({','.join(['%s'] * len(id_list))})"
         print("QUERY:", query)
 
         cursor.execute(query, id_list)
