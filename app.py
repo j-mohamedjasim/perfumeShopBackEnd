@@ -41,7 +41,3 @@ def get_product(ids):
     }
 
     return jsonify(combined)
-
-# Only for local development
-if __name__ == "__main__":
-    app.run(debug=True)
