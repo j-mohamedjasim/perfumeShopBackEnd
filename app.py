@@ -14,7 +14,7 @@ def get_db():
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),
             database=os.getenv("DB_NAME"),
-            port=3306,
+            port=28659,
             ssl_ca="/etc/ssl/certs/ca-certificates.crt"
         )
     except Exception as e:
