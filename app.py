@@ -4,6 +4,24 @@ import mysql.connector
 import os
 import base64
 
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": ["http://127.0.0.1:5500", "http://localhost:5500"]}})
+
+def get_db():
+    try:
+        return mysql.connector.connect(
+            host=os.getenv("DB_HOST"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_NAME"),
+            port=28659,
+            ssl_ca="/etc/ssl/certs/ca-certificates.crt"
+        )
+    except Exception as e:
+        print("DB ERROR:", e)
+        raise
+     
+
 
 @app.get("/product/<ids>")
 def get_product(ids):
